@@ -25,10 +25,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased h-screen overflow-y-scroll`}>
         <Header />
         {children}
-        
+
         <footer className="p-2 w-full bg-violet-500 text-violet-200 text-right">
           <a href="https://github.com/hassansajid8/" target="_blank">@hassansajid</a>
         </footer>
