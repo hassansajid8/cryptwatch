@@ -4,7 +4,7 @@ import ListItem from "@/components/ListItem";
 import { CoinList } from "@/lib/types";
 import { Icon } from "@iconify/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 
 export default function Home() {
   let searchValue;
@@ -35,6 +35,7 @@ export default function Home() {
   }
 
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <main className="w-full bg-gray-100">
       <div className="flex flex-col items-center justify-center px-4 pt-8 pb-4 border-b">
         <h1 className="text-3xl sm:text-4xl md:text-5xl max-w-156 text-center font-bold text-transparent bg-clip-text bg-gradient-to-tr from-violet-500 to-fuchsia-500 inline-block pt-16">
@@ -109,5 +110,6 @@ export default function Home() {
         </div>
       </div>
     </main>
+    </Suspense>
   );
 }
