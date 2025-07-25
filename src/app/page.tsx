@@ -1,5 +1,6 @@
 'use client'
 
+import FeaturedItem from "@/components/FeaturedItem";
 import ListItem from "@/components/ListItem";
 import { CoinList } from "@/lib/types";
 import { Icon } from "@iconify/react";
@@ -62,10 +63,11 @@ export default function Home() {
       <div className="p-12">
         <p className="text-2xl font-[600] text-violet-500">Featured</p>
 
-        <div className="grid grid-cols-3 py-8 gap-8">
-          <div className="border w-fit p-3">helo</div>
-          <div className="border w-fit p-3">helo</div>
-          <div className="border w-fit p-3">helo</div>
+        <div className="flex items-center gap-4 lg:gap-12 overflow-x-auto snap-x py-3">
+          {coins && <FeaturedItem data={coins[0]} />}
+          {coins && <FeaturedItem data={coins[1]} />}
+          {coins && <FeaturedItem data={coins[2]} />}
+          {coins && <FeaturedItem data={coins[3]} />}
         </div>
       </div>
 
@@ -74,7 +76,7 @@ export default function Home() {
 
         <div className="flex items-top flex-col-reverse md:flex-row gap-4">
           <div className="w-full flex flex-col gap-4 md:flex-2/3">
-            {coins?.map((coin, index) => (
+            {coins && coins?.map((coin, index) => (
               <ListItem data={coin} index={index} key={index} />
             ))}
 

@@ -1,18 +1,10 @@
+import { formatCurrency } from '@/lib/helpers';
 import { CoinList } from '@/lib/types';
 import React from 'react'
 
 interface ComponentProps {
     index: Number,
     data: CoinList,
-}
-
-function formatCurrency(str: string){
-    let num = new Number(str);
-
-    return num.toLocaleString('en-US', {
-        style: 'currency',
-        currency: 'USD',
-    });
 }
 
 const ListItem: React.FC<ComponentProps> = (props) => {
