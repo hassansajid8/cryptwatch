@@ -1,11 +1,12 @@
 import { formatCurrency } from '@/lib/helpers';
 import { CoinList } from '@/lib/types'
-import React, { forwardRef, useEffect, useState } from 'react'
+import React, { forwardRef, RefObject, useEffect, useState } from 'react'
 import { Icon } from "@iconify/react"
 import { Smokum } from 'next/font/google';
 
 interface ComponentProps {
     data: CoinList,
+    ref: RefObject<HTMLDivElement | null> | null
 }
 
 const FeaturedItem: React.FC<ComponentProps> = forwardRef<HTMLDivElement, ComponentProps>((props, ref) => {

@@ -82,9 +82,9 @@ export default function Home() {
           </div>
           <div ref={featuredListEl} className="flex-1 flex items-center gap-4 lg:gap-8 overflow-x-auto snap-x py-3 scroll-none no-scrollbar scroll-smooth">
             {coins && <FeaturedItem ref={featuredEl} data={coins[0]} />}
-            {coins && <FeaturedItem data={coins[1]} />}
-            {coins && <FeaturedItem data={coins[2]} />}
-            {coins && <FeaturedItem data={coins[3]} />}
+            {coins && <FeaturedItem ref={null} data={coins[1]} />}
+            {coins && <FeaturedItem ref={null} data={coins[2]} />}
+            {coins && <FeaturedItem ref={null} data={coins[3]} />}
           </div>
           <div className="p-1 bg-gray-200 rounded-full rotate-270 cursor-pointer" onClick={scrollLeft}>
             <Icon icon="fe:arrow-down" width="24" height="24" />
