@@ -1,6 +1,6 @@
 import { formatCurrency } from '@/lib/helpers';
 import { CoinList } from '@/lib/types'
-import React, { useEffect, useState } from 'react'
+import React, { forwardRef, useEffect, useState } from 'react'
 import { Icon } from "@iconify/react"
 import { Smokum } from 'next/font/google';
 
@@ -8,7 +8,7 @@ interface ComponentProps {
     data: CoinList,
 }
 
-const FeaturedItem: React.FC<ComponentProps> = (props) => {
+const FeaturedItem: React.FC<ComponentProps> = forwardRef<HTMLDivElement, ComponentProps>((props, ref) => {
     const coin = props.data;
 
     /* const [chart, setchart] = useState();
@@ -31,7 +31,7 @@ const FeaturedItem: React.FC<ComponentProps> = (props) => {
     } */
 
     return (
-        <div className='p-4 bg-white rounded border min-h-64 shrink-0 w-51 sm:w-64 md:w-72 snap-center transition'>
+        <div ref={ref} className='p-4 bg-white rounded border border-gray-300 min-h-64 shrink-0 w-51 sm:w-64 md:w-72 snap-center transition'>
             <div className='flex items-center gap-4'>
                 <div className='flex-1'>
                     <p className="text-sm text-gray-500">{coin.symbol}</p>
@@ -74,6 +74,6 @@ const FeaturedItem: React.FC<ComponentProps> = (props) => {
 
         </div>
     )
-}
+})
 
 export default FeaturedItem

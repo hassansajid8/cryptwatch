@@ -5,7 +5,7 @@ import ListItem from "@/components/ListItem";
 import { CoinList } from "@/lib/types";
 import { Icon } from "@iconify/react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 
 export default function Home() {
   let searchValue;
@@ -16,10 +16,13 @@ export default function Home() {
 
   const [coins, set_coins] = useState<CoinList[]>();
 
+  const featuredListEl = useRef<HTMLDivElement>(null);
+  const featuredEl = useRef<HTMLDivElement>(null);
+
   searchValue = searchParams.get('search');
 
   useEffect(() => {
-    getCoinsList(pageCount+1);
+    getCoinsList(pageCount + 1);
     set_pageCount(pageCount + 1);
   }, []);
 
@@ -33,6 +36,16 @@ export default function Home() {
     set_coins(data.data);
 
     console.log(data.data);
+  }
+
+  function scrollRight() {
+    let width = featuredEl.current ? featuredEl.current.offsetWidth: 150;
+    if(featuredListEl.current) featuredListEl.current.scrollLeft -= width;
+  }
+
+  function scrollLeft(){
+    let width = featuredEl.current ? featuredEl.current.offsetWidth: 150;
+    if(featuredListEl.current) featuredListEl.current.scrollLeft += width;
   }
 
   return (
@@ -60,14 +73,22 @@ export default function Home() {
 
       </div>
 
-      <div className="p-12">
+      <div className="py-12 px-4">
         <p className="text-2xl font-[600] text-violet-500">Featured</p>
 
-        <div className="flex items-center gap-4 lg:gap-12 overflow-x-auto snap-x py-3">
-          {coins && <FeaturedItem data={coins[0]} />}
-          {coins && <FeaturedItem data={coins[1]} />}
-          {coins && <FeaturedItem data={coins[2]} />}
-          {coins && <FeaturedItem data={coins[3]} />}
+        <div className="flex w-full overflow-x-hidden items-center gap-1">
+          <div className="p-1 bg-gray-200 rounded-full rotate-90 cursor-pointer" onClick={scrollRight}> 
+            <Icon icon="fe:arrow-down" width="24" height="24" />
+          </div>
+          <div ref={featuredListEl} className="flex-1 flex items-center gap-4 lg:gap-8 overflow-x-auto snap-x py-3 scroll-none no-scrollbar scroll-smooth">
+            {coins && <FeaturedItem ref={featuredEl} data={coins[0]} />}
+            {coins && <FeaturedItem data={coins[1]} />}
+            {coins && <FeaturedItem data={coins[2]} />}
+            {coins && <FeaturedItem data={coins[3]} />}
+          </div>
+          <div className="p-1 bg-gray-200 rounded-full rotate-270 cursor-pointer" onClick={scrollLeft}>
+            <Icon icon="fe:arrow-down" width="24" height="24" />
+          </div>
         </div>
       </div>
 
@@ -101,9 +122,9 @@ export default function Home() {
             </summary>
 
             <div className="py-3 flex flex-col gap-4">
-            <input type="text" name="search" id="" className="px-3 text-sm py-3 rounded-full outline-none w-full bg-gray-200 " autoComplete="off" placeholder="Search..." />
+              <input type="text" name="search" id="" className="px-3 text-sm py-3 rounded-full outline-none w-full bg-gray-200 " autoComplete="off" placeholder="Search..." />
 
-            <button className="w-full p-2 bg-gradient-to-tr from-violet-500 to-violet-600 rounded text-white cursor-pointer hover:to-violet-500">Search</button>
+              <button className="w-full p-2 bg-gradient-to-tr from-violet-500 to-violet-600 rounded text-white cursor-pointer hover:to-violet-500">Search</button>
             </div>
 
 
