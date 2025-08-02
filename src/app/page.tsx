@@ -1,30 +1,36 @@
 'use client'
 
+import Details from "@/components/Details";
 import FeaturedItem from "@/components/FeaturedItem";
 import ListItem from "@/components/ListItem";
 import { CoinList } from "@/lib/types";
 import { Icon } from "@iconify/react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Suspense, useEffect, useRef, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 
 export default function Home() {
-  let searchValue;
-  let [pageCount, set_pageCount] = useState(0);
+  const [pageCount, set_pageCount] = useState(0);
+  const [coins, set_coins] = useState<CoinList[]>();
 
+  
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
 
-  const [coins, set_coins] = useState<CoinList[]>();
+  let searchValue = searchParams.get('search');
 
   const featuredListEl = useRef<HTMLDivElement>(null);
   const featuredEl = useRef<HTMLDivElement>(null);
 
-  searchValue = searchParams.get('search');
-
+  /* fetch data on first render */
   useEffect(() => {
     getCoinsList(pageCount + 1);
     set_pageCount(pageCount + 1);
   }, []);
+
+  useEffect(() => {
+    console.log(searchParams);
+  }, [searchParams.get('showcoin')]);
 
   async function getCoinsList(page: Number) {
     const response = await fetch("/api/list", {
@@ -36,6 +42,19 @@ export default function Home() {
     set_coins(data.data);
 
     console.log(data.data);
+  }
+
+  async function fetchNext(){
+    await getCoinsList(pageCount + 1).then(() => {
+      set_pageCount(pageCount + 1);
+    });
+  }
+
+  async function fetchPrev(){
+    if(pageCount === 1) return;
+    await getCoinsList(pageCount - 1).then(() => {
+      set_pageCount(pageCount - 1);
+    });
   }
 
   function scrollRight() {
@@ -85,6 +104,7 @@ export default function Home() {
             {coins && <FeaturedItem ref={null} data={coins[1]} />}
             {coins && <FeaturedItem ref={null} data={coins[2]} />}
             {coins && <FeaturedItem ref={null} data={coins[3]} />}
+            {coins && <FeaturedItem ref={null} data={coins[4]} />}
           </div>
           <div className="p-1 bg-gray-200 rounded-full rotate-270 cursor-pointer" onClick={scrollLeft}>
             <Icon icon="fe:arrow-down" width="24" height="24" />
@@ -93,7 +113,7 @@ export default function Home() {
       </div>
 
       <div className="p-12" id="content">
-        <p className="text-2xl font-[600] text-violet-500 mb-8">{searchValue ? 'Search for "' + searchValue + '"' : 'All Currencies'}</p>
+        <p className="text-xl font-[600] text-violet-500 mb-8">{searchValue ? 'Search for "' + searchValue + '"' : 'All Currencies'}</p>
 
         <div className="flex items-top flex-col-reverse md:flex-row gap-4">
           <div className="w-full flex flex-col gap-4 md:flex-2/3">
@@ -102,11 +122,11 @@ export default function Home() {
             ))}
 
             <div className="w-full p-3 text-center flex items-center justify-center gap-3">
-              <button className="rotate-90 cursor-pointer hover:bg-gray-200 rounded-full p-1">
+              <button className="rotate-90 cursor-pointer hover:bg-gray-200 rounded-full p-1 disabled:hover:bg-transparent disabled:cursor-not-allowed" onClick={fetchPrev} disabled={pageCount==1? true : false}>
                 <Icon icon="fe:arrow-down" width="24" height="24" />
               </button>
               <p>Page {pageCount}</p>
-              <button className="rotate-270 cursor-pointer hover:bg-gray-200 rounded-full p-1">
+              <button className="rotate-270 cursor-pointer hover:bg-gray-200 rounded-full p-1" onClick={fetchNext}>
                 <Icon icon="fe:arrow-down" width="24" height="24" />
               </button>
             </div>
@@ -131,6 +151,9 @@ export default function Home() {
           </details>
         </div>
       </div>
+      
+      {searchParams.get('showcoin') && <Details />}
+
     </main>
   );
 }
